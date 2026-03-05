@@ -10,8 +10,8 @@ Visual Studio Code using the Remote SSH extension.
 
 ## Prerequisites
 
--   Linux VM\
--   SSH access\
+-   Linux VM
+-   SSH access
 -   Non-root user with a home directory
 
 ------------------------------------------------------------------------
