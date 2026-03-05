@@ -1,106 +1,125 @@
 # Prepare Linux VM for VS Code Remote SSH
 
-Minimal steps to prepare a Linux virtual machine for connecting with
+Minimal steps to prepare a Linux virtual machine for connecting with\
 Visual Studio Code using the Remote SSH extension.
 
-> Commands are written for AlmaLinux and other RHEL-compatible,
+> Commands are written for AlmaLinux and other RHEL-compatible,\
 > DNF-based distributions (AlmaLinux, Rocky Linux, RHEL, Fedora).
 
----
+------------------------------------------------------------------------
 
 ## Prerequisites
 
-- Linux VM
-- SSH access
-- Non-root user with a home directory
+-   Linux VM\
+-   SSH access\
+-   Non-root user with a home directory
 
----
+------------------------------------------------------------------------
 
 ## System update
 
-```bash
+``` bash
 sudo dnf update
 ```
 
 Ensure system packages are up to date.
 
----
+------------------------------------------------------------------------
 
 ## Required utilities
 
 VS Code Server is unpacked on the remote host.
 
-```bash
+``` bash
 sudo dnf install tar unzip --setopt=tsflags=nodocs
 ```
 
----
+------------------------------------------------------------------------
+
+## Install Git
+
+Install Git for working with repositories.
+
+``` bash
+sudo dnf install git --setopt=tsflags=nodocs
+```
+
+------------------------------------------------------------------------
 
 ## Home directory execution
 
-VS Code Server runs from `~/.vscode-server`.
+VS Code Server runs from `~/.vscode-server`.\
 If `/home` is mounted with `noexec`, it must be remounted.
 
-```bash
+``` bash
 sudo mount -o remount,exec /home
 ```
 
 For permanent setup, adjust `/etc/fstab`.
 
----
+------------------------------------------------------------------------
 
 ## Workspace directory
 
-```bash
+Create a directory for source code and repositories.
+
+``` bash
 mkdir -p ~/src
 ```
 
-Recommended location for source code and repositories.
+Recommended location for working repositories.
 
----
+------------------------------------------------------------------------
+
+## Git identity (global)
+
+Configure Git identity for repositories on this VM.
+
+``` bash
+git config --global user.name "Your Name"
+git config --global user.email "your.email@example.com"
+```
+
+Using `--global` ensures the configuration applies to all repositories
+for the current user.
+
+------------------------------------------------------------------------
 
 ## SSH key for GitHub
 
 Generate an Ed25519 SSH key.
 
-```bash
+``` bash
 ssh-keygen -t ed25519 -C "your.email@example.com"
 ```
 
 Show the public key:
 
-```bash
+``` bash
 cat ~/.ssh/id_ed25519.pub
 ```
 
 Add it to GitHub:
-Settings → SSH and GPG keys.
 
----
+Settings → SSH and GPG keys
 
-## Git identity (local)
+------------------------------------------------------------------------
 
-Configure Git identity for repositories on this VM.
+## SSH permissions (recommended)
 
-```bash
-git config user.name "Your Name"
-git config user.email "your.email@example.com"
+Ensure correct permissions for the `.ssh` directory and keys.
+
+``` bash
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/id_ed25519
 ```
 
----
+------------------------------------------------------------------------
 
 ## Verification
 
-```bash
+``` bash
 ssh user@vm_ip
 ```
 
-If SSH works, VS Code Remote SSH should connect successfully.
-
----
-
-## Notes
-
-- No VS Code packages are required on the VM
-- VS Code Server is managed by the client
-- Do not run VS Code Server as root
+Confirm that SSH access to the VM works correctly.
