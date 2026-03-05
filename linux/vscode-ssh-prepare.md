@@ -119,7 +119,7 @@ chmod 600 ~/.ssh/id_ed25519
 ## Verification
 
 ``` bash
-ssh user@vm_ip
+ssh -T git@github.com
 ```
 
 Confirm that SSH access to the VM works correctly.
